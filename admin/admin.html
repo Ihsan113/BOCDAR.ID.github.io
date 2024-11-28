@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Kelola Barang</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffcc00;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px; /* Space between tables */
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ffcc00;
+        }
+
+        th {
+            background-color: #333;
+            color: #ffcc00;
+        }
+
+        td {
+            background-color: #2a2a2a;
+            color: #fff;
+        }
+
+        button {
+            background-color: #6200ea;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+
+        .no-items {
+            text-align: center;
+            color: #ffcc00;
+        }
+
+        .edit-row {
+            display: none;
+        }
+
+        .modal {
+            display: none; /* Tersembunyi secara default */
+            position: fixed;
+            z-index: 1; /* Di atas elemen lainnya */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Aktifkan scroll jika diperlukan */
+            background-color: rgba(0, 0, 0, 0.7); /* Warna latar belakang dengan transparansi yang lebih gelap */
+            padding-top: 0; /* Hapus padding atas */
+        }
+
+        .modal-content {
+            background-color: #ffffff; /* Warna latar belakang modal */
+            margin: 10% auto; /* Tengah secara vertikal */
+            padding: 20px;
+            border-radius: 8px; /* Sudut membulat */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan untuk efek kedalaman */
+            width: 90%; /* Lebar modal */
+            max-width: 500px; /* Lebar maksimal untuk modal */
+            animation: fadeIn 0.3s; /* Animasi masuk */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #333; /* Warna untuk tombol tutup */
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s; /* Transisi warna */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #ff0000; /* Warna saat hover */
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%; /* Lebar penuh untuk input */
+            padding: 10px;
+            margin: 5px 0 15px 0; /* Margin atas, bawah */
+            border: 1px solid #ccc; /* Garis tepi */
+            border-radius: 4px; /* Sudut membulat */
+            box-sizing: border-box; /* Menghitung padding dan border dalam lebar */
+            transition: border-color 0.3s; /* Transisi warna border */
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #007bff; /* Warna border saat fokus */
+            outline: none; /* Hilangkan outline default */
+        }
+
+        button {
+            background-color: #007bff; /* Warna tombol */
+            color: white; /* Warna teks */
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px; /* Sudut membulat */
+            cursor: pointer;
+            transition: background-color 0.3s; /* Transisi warna tombol */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Warna saat hover */
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Daftar Barang</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama Barang</th>
+                <th>Kategori Game</th>
+                <th>Harga Asli</th>
+                <th>Harga Diskon</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="itemsTableBody"></tbody>
+    </table>
+
+    <!-- Modal untuk Edit Item -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Edit Item</h2>
+            <input type="hidden" id="editItemId" />
+            <label>Nama Barang:</label>
+            <input type="text" id="editNamaBarang" />
+            <label>Kategori Game:</label>
+            <input type="text" id="editKategoriGame" disabled />
+            <label>Harga Asli:</label>
+            <input type="text" id="editHargaAsli" oninput="formatRupiah(this)" />
+            <label>Harga Diskon:</label>
+            <input type="text" id="editHargaDiskon" oninput="formatRupiah(this)" />
+
+            <button onclick="saveItem()">Simpan</button>
+        </div>
+    </div>
+    <input type="hidden" id="editCollectionName" />
+
+<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+
+<script>
+   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAjqRnTArhBhY8FD-Kfx10lE0hU3uZfw0o",
+  authDomain: "bocdar-f32ae.firebaseapp.com",
+  projectId: "bocdar-f32ae",
+  storageBucket: "bocdar-f32ae.firebasestorage.app",
+  messagingSenderId: "287761560812",
+  appId: "1:287761560812:web:3e416122c6f61cc9b721c9",
+  measurementId: "G-W17ZLT7J0F"
+};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    function fetchItems() {
+        const tableBody = document.getElementById('itemsTableBody');
+        tableBody.innerHTML = ''; // Kosongkan tabel
+
+        const collections = ["FreeFire", "MobileLegends", "PUBG"];
+        let emptyTable = true;
+
+        collections.forEach(collection => {
+            db.collection(collection).get().then((querySnapshot) => {
+                if (!querySnapshot.empty) {
+                    emptyTable = false;
+                    querySnapshot.forEach((doc) => {
+                        const itemData = doc.data();
+                        const itemRow = `
+                            <tr data-id="${doc.id}">
+                                <td>${itemData.namaBarang}</td>
+                                <td>${collection}</td>
+                                <td>Rp${itemData.hargaAsli}</td>
+                                <td>Rp${itemData.hargaDiskon}</td>
+                                <td>
+                                    <button onclick="showEditModal('${doc.id}', '${itemData.namaBarang}', '${collection}', '${itemData.hargaAsli}', '${itemData.hargaDiskon}')">Edit</button>
+                                    <br><br>
+                                    <button onclick="deleteItem('${collection}', '${doc.id}')">Hapus</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += itemRow;
+                    });
+                }
+
+                if (collections.indexOf(collection) === collections.length - 1 && emptyTable) {
+                    tableBody.innerHTML = `<tr class="no-items"><td colspan="5">Tidak ada barang untuk ditampilkan.</td></tr>`;
+                }
+            }).catch((error) => {
+                console.error("Error fetching items from " + collection + ": ", error);
+            });
+        });
+    }
+
+    function showEditModal(itemId, namaBarang, kategoriGame, hargaAsli, hargaDiskon) {
+                document.getElementById('editItemId').value = itemId;
+        document.getElementById('editNamaBarang').value = namaBarang;
+        document.getElementById('editKategoriGame').value = kategoriGame;
+        document.getElementById('editHargaAsli').value = hargaAsli;
+        document.getElementById('editHargaDiskon').value = hargaDiskon;
+
+        document.getElementById('editCollectionName').value = kategoriGame; // Simpan nama koleksi
+
+        // Tampilkan modal
+        document.getElementById('editModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        // Tutup modal
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    function saveItem() {
+    const itemId = document.getElementById('editItemId').value;
+    const namaBarang = document.getElementById('editNamaBarang').value;
+
+    // Ambil nilai harga asli dan diskon, lalu hilangkan "Rp" atau karakter lain yang tidak diperlukan
+    const hargaAsli = document.getElementById('editHargaAsli').value.replace(/[^0-9\.]/g, '');
+    const hargaDiskon = document.getElementById('editHargaDiskon').value.replace(/[^0-9\.]/g, '');
+    
+    const collectionName = document.getElementById('editCollectionName').value;
+
+    if (namaBarang && hargaAsli && hargaDiskon) {
+        // Update item di Firestore
+        db.collection(collectionName).doc(itemId).update({
+            namaBarang: namaBarang,
+            hargaAsli: hargaAsli,    // Kirim harga asli tanpa "Rp"
+            hargaDiskon: hargaDiskon // Kirim harga diskon tanpa "Rp"
+        }).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Barang berhasil diperbarui!',
+                showConfirmButton: false,
+                timer: 2000
+            });
+            closeModal();
+            fetchItems(); // Refresh tabel
+        }).catch((error) => {
+            console.error("Error updating item: ", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Terjadi kesalahan saat memperbarui barang.',
+            });
+        });
+    } else {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Peringatan',
+            text: 'Mohon isi semua field.',
+        });
+    }
+}
+
+    function deleteItem(collection, itemId) {
+        Swal.fire({
+            title: 'Apakah kamu yakin?',
+            text: "Barang ini akan dihapus secara permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                db.collection(collection).doc(itemId).delete().then(() => {
+                    Swal.fire(
+                        'Dihapus!',
+                        'Barang berhasil dihapus.',
+                        'success'
+                    );
+                    fetchItems(); // Refresh tabel
+                }).catch((error) => {
+                    console.error("Error removing document: ", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Terjadi kesalahan saat menghapus barang.',
+                    });
+                });
+            }
+        });
+    }
+
+    function formatRupiah(input) {
+        let value = input.value.replace(/[^,\d]/g, '').toString();
+        let split = value.split(',');
+        let sisa = split[0].length % 3;
+        let rupiah = split[0].substr(0, sisa);
+        let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        if (ribuan) {
+            let separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+        input.value = 'Rp' + rupiah;
+    }
+
+    // Fetch data saat halaman dimuat
+    window.onload = fetchItems;
+</script>
+</body>
+</html>

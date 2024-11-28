@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Input Barang</title>
+  <style>
+      /* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Form Styling */
+form {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 400px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+/* Label Styling */
+label {
+  font-size: 14px;
+  color: #bbbbbb;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Input and Select Styling */
+input[type="text"], input[type="number"], select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2c2c2c;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+/* Placeholder Text Styling */
+input::placeholder, select::placeholder {
+  color: #777777;
+}
+
+/* Button Styling */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #6200ea;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3700b3;
+}
+
+/* Add subtle animations for inputs and focus */
+input:focus, select:focus {
+  outline: none;
+  background-color: #333333;
+  transition: background-color 0.3s ease;
+}
+
+  </style>
+</head>
+<body>
+     <br>
+  <h2>Input Barang</h2>
+ 
+  <form id="inputForm">
+    <label for="namaBarang">Nama Barang:</label><br>
+    <input type="text" id="namaBarang" name="namaBarang" required><br><br>
+
+    <label for="kategoriGame">Kategori Game:</label><br>
+    <select id="kategoriGame" name="kategoriGame" required>
+      <option value="">Pilih Kategori</option>
+      <option value="MobileLegends">Mobile Legend</option>
+      <option value="PUBG">PUBG</option>
+      <option value="FreeFire">Free Fire</option>
+    </select><br><br>
+
+   <label for="hargaAsli">Harga Asli:</label><br>
+<input type="text" id="hargaAsli" name="hargaAsli" required oninput="formatCurrency(this)"><br><br>
+
+<label for="hargaDiskon">Harga Diskon:</label><br>
+<input type="text" id="hargaDiskon" name="hargaDiskon" required oninput="formatCurrency(this)"><br><br>
+
+
+    <button type="submit">Kirim</button>
+  </form>
+
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

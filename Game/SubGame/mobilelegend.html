@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesan Produk Mobile Legends</title>
+  <style>
+      
+      html {
+    scroll-behavior: smooth;
+}
+
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      
+    }
+
+
+    
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #1e1e1e;
+        padding: 10px;
+        color: #ffffff;
+        border-bottom: 1px solid #444;
+    }
+
+    .header h1 {
+        font-size: 16px;
+        margin: 0;
+        text-align: center;
+        flex-grow: 1;
+        font-family: 'Press Start 2P', cursive;
+    }
+
+    .back-button {
+    background: none; /* No background */
+    border: none; /* No border */
+    color: #ffffff; /* Text color */
+    font-size: 18px; /* Font size */
+    cursor: pointer; /* Pointer on hover */
+    padding: 10px; /* Padding */
+    transition: color 0.3s ease, transform 0.3s ease; /* Transition effects */
+    position: relative; /* For positioning */
+    left: -15px; /* Move the button to the left */
+    text-decoration: none; /* Remove underline */
+    display: inline-flex; /* Use flexbox for better alignment */
+    align-items: center; /* Center items vertically */
+}
+
+.back-button i {
+    margin-right: 5px; /* Space between icon and text */
+}
+
+/* Hover effects */
+.back-button:hover {
+    color: #00e676; /* Change text color on hover */
+    transform: translateY(-3px); /* Slight lift effect */
+}
+
+/* Focus effect for accessibility */
+.back-button:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 3px rgba(0, 230, 118, 0.5); /* Custom focus outline */
+}
+
+
+
+    
+  h3 {
+  margin-bottom: 20px; /* Jarak bawah yang lebih kecil */
+  font-size: 23px; /* Ukuran font lebih besar */
+  color: #ffffff; /* Warna teks putih */
+  font-weight: 700; /* Font tebal untuk penekanan */
+  text-transform: uppercase; /* Mengubah teks menjadi huruf kapital */
+  letter-spacing: 1px; /* Jarak antar huruf untuk keterbacaan */
+  position: relative; /* Memungkinkan untuk menambahkan efek */
+  text-align: left; /* Rata kiri untuk label */
+}
+
+
+
+
+  .form-card {
+  margin: 20px auto; /* Centers the card horizontally and adds vertical spacing */
+  padding: 20px;
+  width: 95%; /* Set width relative to the screen, so it scales */
+  max-width: 380px; /* Limits the maximum width */
+  background: linear-gradient(145deg, #1e1e1e, #232323); /* Gradasi untuk tampilan dinamis */
+  border-radius: 16px; /* Sudut lebih bulat untuk kesan modern */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), /* Shadow utama */
+              0 2px 6px rgba(0, 0, 0, 0.2); /* Shadow tambahan untuk kedalaman */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transisi halus */
+}
+
+.form-card:hover {
+  transform: translateY(-5px); /* Sedikit mengangkat saat hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), /* Shadow lebih intens saat hover */
+              0 4px 12px rgba(0, 0, 0, 0.3); /* Tambahan shadow */
+}
+
+
+
+ .products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px; /* Lebih besar untuk memberikan ruang antar produk */
+  margin-bottom: 20px;
+}
+
+.product {
+  background: linear-gradient(145deg, #2b2b2b, #1e1e1e); /* Gradasi dua warna gelap */
+  padding: 15px;
+  border-radius: 12px; /* Sudut bulat */
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #2d323cda;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transisi yang lebih halus */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Shadow lebih halus */
+}
+
+.product:hover {
+  transform: translateY(-5px); /* Efek hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), /* Shadow lebih intens */
+              0 0 15px rgba(0, 230, 118, 0.4); /* Efek glowing hijau lembut */
+}
+
+.product.selected {
+  border-color: #00e676; /* Warna hijau saat dipilih */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), /* Shadow intens */
+              0 0 20px rgba(0, 230, 118, 0.6); /* Efek glowing lebih kuat */
+}
+
+
+.product h3 {
+  margin-bottom: 10px;
+  font-size: 13.8px;
+  color: #ffffff; /* Warna teks putih untuk kontras */
+  font-weight: 600; /* Font tebal untuk penekanan */
+  text-transform: uppercase; /* Mengubah teks menjadi kapital untuk kesan lebih tegas */
+  letter-spacing: 1px; /* Menambah spasi antar huruf untuk kesan elegan */
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease; /* Animasi saat hover */
+  z-index: 1;
+}
+
+
+.product h3::after {
+  content: ''; /* Menambahkan elemen setelah teks */
+  display: block;
+  width: 50px; /* Lebar garis awal */
+  height: 3px; /* Tinggi garis */
+  background-color: #00e676; /* Warna garis */
+  margin: 10px 0; /* Margin atas dan bawah */
+  transition: width 0.3s ease; /* Animasi untuk transisi lebar */
+}
+
+/* Memperpanjang garis saat produk dipilih */
+.product.selected h3::after {
+  width: 100px; /* Memperpanjang garis saat produk dipilih */
+}
+
+
+/* Mengatur kontainer harga asli dan persentase diskon menggunakan flexbox */
+.product .harga-wrapper {
+  display: flex;
+  align-items: center; /* Vertikal align agar teks rata tengah */
+  margin-bottom: 10px; /* Beri sedikit jarak dari harga diskon */
+}
+
+.product .harga-asli {
+  text-decoration: line-through;
+  color: #888888; /* Warna yang lebih gelap untuk elegansi */
+  font-size: 13px;
+  margin-right: 10px; /* Jarak antara harga asli dan persen diskon */
+}
+
+/* Persentase diskon default tanpa glow */
+.product .persen-diskon {
+  color: #00e676;
+  font-size: 0.7em;
+  font-weight: bold;
+  padding: 6px 2px;
+  border-radius: 5px;
+  background-color: rgba(0, 230, 118, 0.1); /* Background hijau muda transparan */
+  border: 1px solid #00e676; /* Border hijau */
+  /* Efek glow dihapus dari default */
+}
+
+/* Efek glowing aktif hanya saat produk dipilih */
+.product.selected .persen-diskon {
+  animation: glow-green 1.5s infinite alternate; /* Animasi glow hijau */
+}
+
+/* Efek glowing untuk persen diskon berwarna hijau */
+@keyframes glow-green {
+  0% {
+    box-shadow: 0 0 5px #00e676; /* Cahaya hijau awal */
+  }
+  100% {
+    box-shadow: 0 0 20px #00e676; /* Cahaya hijau lebih intens */
+  }
+}
+
+
+/* Harga diskon dengan tampilan lebih elegan */
+.product .harga-diskon {
+  color: #ffffff;
+  background-color: #42a5f5;
+  padding: 5px 15px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  animation: flash-animation 1.5s infinite;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  margin-top: 5px;
+}
+
+@keyframes flash-animation {
+  0% {
+    background-color: #42a5f5;
+  }
+  50% {
+    background-color: #64b5f6;
+  }
+  100% {
+    background-color: #42a5f5;
+  }
+}
+
+
+
+    .metode-pembayaran {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #2c2c2c;
+      color: #ffffff;
+      font-size: 16px;
+    }
+
+    /* Button */
+    .button-container {
+  display: grid;            /* Enable grid */
+  place-items: center;     
+  margin-bottom: 65px;
+}
+
+button {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px;
+  background-color: #6200ea;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3700b3;
+}
+
+   /* Spinner Style */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #6200ea;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    display: none;
+    margin: 0 auto;
+}
+
+/* Modal styling */
+.modal {
+    position: fixed;
+    left: 0;
+    bottom: -100%;
+    width: 100%;
+    background-color: #1e1e1e; /* Background gelap */
+    color: #ffffff;
+    border-radius: 16px 16px 0 0; /* Sudut melengkung di atas */
+    padding: 20px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.7); /* Shadow lebih dalam */
+    transition: all 0.4s ease-in-out;
+}
+
+.modal.show {
+    bottom: 0; /* Menampilkan modal */
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: column; /* Stack the drag handle and title */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-drag-handle {
+    width: 60px; /* Lebar pegangan */
+    height: 6px; /* Tinggi pegangan */
+    background-color: #bbbbbb; /* Warna abu-abu terang */
+    border-radius: 3px; /* Sudut melengkung */
+    margin-bottom: 10px; /* Ruang antara pegangan dan judul */
+}
+
+.modal-title {
+    font-size: 24px; /* Ukuran font lebih besar untuk judul */
+    font-weight: bold; /* Berat font tebal */
+    margin-bottom: 10px; /* Ruang di bawah judul */
+}
+
+.modal-content {
+    margin-bottom: 30px;
+    font-family: 'Arial', sans-serif; /* Gunakan font yang lebih modern */
+    font-size: 16px; /* Ukuran font lebih besar */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Bayangan teks yang halus */
+    background: linear-gradient(135deg, rgba(0, 100, 0, 0.8), rgba(0, 200, 0, 0.3)); /* Gradient latar belakang */
+    padding: 15px; /* Tambahkan padding */
+    border-radius: 8px;
+    border: 2px solid #00c853; /* Border hijau */
+    display: flex; /* Gunakan flexbox untuk tata letak */
+    flex-direction: column; /* Susun item secara vertikal */
+    align-items: stretch; /* Renggangkan item untuk lebar penuh */
+}
+
+.modal-content p {
+    margin: 5px 0; /* Jarak antar paragraf */
+    width: 100%; /* Lebar penuh */
+    text-align: left; /* Rata kiri */
+    border-bottom: 1px solid #00c853; /* Tambahkan border bawah */
+    padding: 10px 0; /* Tambahkan padding untuk jarak yang lebih baik */
+}
+
+.modal-content p:last-child {
+    border-bottom: none; /* Hapus border untuk item terakhir */
+}
+
+.modal button {
+    background-color: #00c853; /* Warna latar belakang hijau */
+    color: white; /* Warna teks putih */
+    border: none; /* Hapus border */
+    border-radius: 4px; /* Sudut melengkung */
+    padding: 12px 24px; /* Tambahkan padding */
+    font-size: 16px; /* Ukuran font */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transisi */
+    cursor: pointer; /* Kursor pointer */
+    margin-top: 10px; /* Jarak atas untuk tombol */
+}
+
+.modal button:hover {
+    background-color: #3700b3; /* Ubah warna saat hover */
+    transform: translateY(-2px); /* Efek angkat saat hover */
+}
+
+
+
+ /* Footer */
+  footer {
+    background-color: #222;
+    color: #fff;
+    padding: 50px 20px;
+    font-family: 'Roboto', sans-serif;
+    border-top: 1px solid #444;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    text-align: left;
+}
+
+.footer-logo h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #f39c12;
+    margin-bottom: 15px;
+}
+
+.footer-logo p {
+    max-width: 400px;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-around;
+    gap: 50px;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #f39c12;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footer-social {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.footer-social a {
+    color: #f39c12;
+    margin: 0 15px;
+    font-size: 24px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-social a:hover {
+    color: white;
+    transform: scale(1.1);
+}
+
+.footer-legal {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #999;
+}
+
+.footer-legal p:hover {
+    color: white;
+}
+
+
+    .description-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #20253fe4;
+        padding: 20px;
+        height: 200px;
+        margin-top: 2px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-description {
+        max-width: 70%;
+    }
+
+    .text-description h2 {
+        font-size: 24px;
+        margin: 0 0 10px;
+        font-family: 'Press Start 2P', cursive;
+    }
+
+    .text-description p {
+        font-size: 14px;
+        margin: 0 0 20px;
+        line-height: 1.6;
+    }
+
+    .labels {
+        display: flex;
+        gap: 10px;
+        margin-top: 8px;
+        justify-content: center; /* Posisi center secara horizontal */
+    }
+
+    .label-safe,
+    .label-fast {
+        background-color: #00e676;
+        color: white;
+        font-size: 14px;
+        padding: 8px 12px;
+        border-radius: 5px;
+        font-family: 'Roboto', sans-serif;
+        display: flex;
+        align-items: center;
+    }
+
+    .label-safe {
+        background-color: #28a745;
+    }
+
+    .label-fast {
+        background-color: #ffcc00;
+    }
+
+    .label-safe i,
+    .label-fast i {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+    .image-container {
+        max-width: 25%;
+        text-align: right;
+    }
+
+    .game-image {
+        width: 100px;
+        border-radius: 10px;
+    }
+
+.result {
+            margin-top: 20px;
+            text-align: center;
+        }
+        /* Spinner Style */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #6200ea;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+.filter-options {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-options label {
+  margin-right: 10px;
+  font-weight: bold;
+  color: #e4e4e4;
+}
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select-wrapper i {
+  position: absolute;
+  left: 10px;
+  color: #888; /* Warna ikon */
+}
+
+select {
+  padding: 8px 30px; /* Padding untuk memberi ruang pada ikon */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  font-size: 12px;
+  appearance: none; /* Menghilangkan tampilan default dropdown */
+  background: #f9f9f9; /* Warna latar belakang */
+  color: #555; /* Warna teks */
+  cursor: pointer;
+  transition: border-color 0.3s ease; /* Transisi border */
+}
+
+select:hover {
+  border-color: #888; /* Warna border saat hover */
+}
+
+select:focus {
+  border-color: #007bff; /* Warna border saat fokus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Efek bayangan saat fokus */
+}
+
+  </style>
+</head>
+<body>
+
+ <!-- Header with Back Button -->
+<header class="header">
+     <a href="https://ahsan-store-github-io.vercel.app/" class="back-button">
+    <i class="fas fa-arrow-left"></i> Kembali
+</a>
+    <h1>Product Mobile Legends</h1>
+</header>
+
+<div class="description-container">
+    <div class="text-description">
+        <h2>Mobile Legends</h2>
+        <p>Mobile Legends adalah game MOBA 5v5 populer di seluruh dunia. Top up cepat dan aman untuk meningkatkan pengalaman bermain Anda!</p>
+        
+    </div>
+    <div class="image-container">
+        <img src="https://neropass.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fbusur%2Fneropass%2Fcategory%2Fmobilelegends.jpg%3Ftr%3Dw-256%2Ch-256&w=256&q=50" alt="Mobile Legends" class="game-image">
+    </div>
+</div>
+
+<div class="labels">
+    <span class="label-safe">
+        <i class="fas fa-shield-alt"></i> 100% Aman
+    </span>
+    <span class="label-fast">
+        <i class="fas fa-clock"></i> Proses 1-2 Menit
+    </span>
+</div>
+
+  <!-- Form UID & Server ID -->
+   <form id="checkForm">
+  <div class="form-card">
+    <h3>1. Masukkan UID dan Server ID</h3>
+    <input type="text" id="uid" placeholder="Masukkan UID" required>
+    <input type="text" id="serverId" placeholder="Masukkan Server ID" required>
+    <br>
+    <br>
+    <center>
+     <button type="submit">Cek Nama Game</button>
+     </center>
+        </form>
+
+        <div class="spinner" id="spinner"></div> <!-- Animasi spinner -->
+        <div class="result" id="result"></div>
+    </div>
+
+  </div>
+
+
+
+
+  <!-- Pilihan Produk -->
+  <div class="form-card">
+        <h3>2. Pilih Produk</h3>
+      <!-- Filter Produk -->
+<div class="filter-options">
+  <label for="sortPrice">Kategori :</label>
+  <div class="select-wrapper">
+    <i class="fas fa-sort-amount-down-alt"></i> <!-- Ikon untuk dropdown -->
+    <select id="sortPrice">
+      <option value="termurah">Termurah</option>
+      <option value="termahal">Termahal</option>
+      <option value="WDP">WDP</option>
+    </select>
+  </div>
+</div>
+ 
+    <div class="products-grid" id="productContainer">
+      <!-- Produk akan diisi dari Firebase -->
+    </div>
+  </div>
+
+ <!-- Metode Pembayaran -->
+<div class="form-card metode-pembayaran">
+    <h3>3. Pilih Metode Pembayaran</h3>
+    <input type="radio" id="qrPayment" name="paymentMethod" value="QR" checked>
+    <label for="qrPayment">Pembayaran via QR</label>
+    <p style="margin-top: 5px; color: #bbbbbb; font-size: 14px;">
+        Metode ini memungkinkan Anda untuk melakukan pembayaran dengan memindai kode QR yang akan muncul setelah konfirmasi. 
+        Pastikan aplikasi pembayaran Anda terhubung dengan internet dan siap digunakan.
+    </p>
+</div>
+
+
+<!-- Nomor Telepon -->
+<div class="form-card">
+    <h3>4. Masukkan Nomor Telepon</h3>
+    <input type="text" id="phoneNumber" placeholder="Masukkan Nomor Telepon" required>
+    
+    <!-- Peringatan mengenai kewajiban dan informasi kontak -->
+    <p style="margin-top: 5px; color: #e53935; font-size: 14px;">
+        * Nomor telepon wajib diisi. Jika Anda mengalami kendala, Kami bisa menghubungi kamu.
+    </p>
+</div>
+
+  
+<div class="button-container">
+  <button id="placeOrderBtn">Pesan</button>
+</div>
+
+<!-- Modal -->
+<div id="orderModal" class="modal">
+  <div class="modal-header">
+    <!-- Drag handle line -->
+    <div class="modal-drag-handle"></div>
+    <h3>Detail Pesanan</h3>
+   
+  <div class="modal-content">
+    <p id="orderDetails"></p>
+  </div>
+  <button id="confirmOrderBtn">Lanjutkan</button>
+</div>
+</div>
+
+
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-logo">
+            <h2>BOCDAR.ID</h2>
+            <p>BOCDAR.ID adalah website top up murah, cepat, terpercaya dengan banyak pilihan produk, melayani transaksi 24 jam, dan dengan metode pembayaran terlengkap.</p>
+        </div>
+        <div class="footer-links">
+            <ul>
+                <li><a href="menu/bantuan.html">Bantuan</a></li>
+                
+                <li><a href="menu/legal.html">Legal</a></li>
+            </ul>
+            <ul>
+                <li><a href="menu/syarat.html">Syarat & Ketentuan</a></li>
+                <li><a href="menu/kebijakan.html">Kebijakan Privasi</a></li>
+               
+            </ul>
+        </div>
+        <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/bocdar.id?igsh=bHRkYXJsb3Zicm9j"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-legal">
+            <p>&copy; 2024 BOCDAR.ID Semua hak cipta dilindungi.</p>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+<script>
+  const _0x2bb65b=_0x3eb2;(function(_0x3dbacb,_0x8055ec){const _0x17623c=_0x3eb2,_0x1c264f=_0x3dbacb();while(!![]){try{const _0x106d7b=parseInt(_0x17623c(0x1a0))/0x1*(parseInt(_0x17623c(0x18d))/0x2)+parseInt(_0x17623c(0x184))/0x3*(parseInt(_0x17623c(0x1ac))/0x4)+-parseInt(_0x17623c(0x1b6))/0x5+-parseInt(_0x17623c(0x15f))/0x6*(parseInt(_0x17623c(0x151))/0x7)+parseInt(_0x17623c(0x15e))/0x8*(-parseInt(_0x17623c(0x18b))/0x9)+parseInt(_0x17623c(0x161))/0xa*(-parseInt(_0x17623c(0x17c))/0xb)+-parseInt(_0x17623c(0x13c))/0xc*(-parseInt(_0x17623c(0x19c))/0xd);if(_0x106d7b===_0x8055ec)break;else _0x1c264f['push'](_0x1c264f['shift']());}catch(_0x3caa7c){_0x1c264f['push'](_0x1c264f['shift']());}}}(_0xd147,0x30726));function _0x3eb2(_0x5e9f3c,_0x252881){const _0xd14709=_0xd147();return _0x3eb2=function(_0x3eb2b6,_0x461e5e){_0x3eb2b6=_0x3eb2b6-0x137;let _0x31050b=_0xd14709[_0x3eb2b6];return _0x31050b;},_0x3eb2(_0x5e9f3c,_0x252881);}const firebaseConfig={'apiKey':_0x2bb65b(0x138),'authDomain':_0x2bb65b(0x152),'projectId':'bocdar-f32ae','storageBucket':_0x2bb65b(0x165),'messagingSenderId':_0x2bb65b(0x14d),'appId':_0x2bb65b(0x155),'measurementId':_0x2bb65b(0x146)},app=firebase[_0x2bb65b(0x174)](firebaseConfig),db=firebase[_0x2bb65b(0x177)](),productContainer=document[_0x2bb65b(0x1a7)]('productContainer');function _0xd147(){const _0x1c02e5=['</p>\x0a\x20\x20\x20\x20<p><strong>Nomor\x20Telepon:</strong>\x20','6d4cdbbb4b70110a8feaa0bf07c0e8c16f86e2bdfbfcbc14b7','20px','14TMufvS','bocdar-f32ae.firebaseapp.com','body','backgroundColor','1:287761560812:web:3e416122c6f61cc9b721c9','none','</p>\x0a\x20\x20\x20\x20<p><strong>Server\x20ID:</strong>\x20','Error\x20membuat\x20pesanan:\x20','1000','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<h3>','clientY','padding','</p>','5392dIwpcA','1040034kDJxbR','selected','480120TpWpQY','translate(-50%,\x20-50%)','termurah','borderRadius','bocdar-f32ae.firebasestorage.app','confirmOrderBtn','Pesanan\x20berhasil\x20dibuat!','https://api.velixs.com/idgames-checker?apikey=','</p>\x0a\x20\x20\x20\x20<p><strong>Metode\x20Pembayaran:</strong>\x20','innerHTML','then','push','fire','round','checkForm','href','</p>\x0a\x20\x20\x20\x20<p><strong>Produk:</strong>\x20','hargaAsli','appendChild','initializeApp','termahal','serverId','firestore','fixed','filter','#00e676','status','33DgNjLY','0\x200\x2010px\x20rgba(0,\x200,\x200,\x200.5)','left','show','\x20-\x20Rp','#ffffff','message','zIndex','6ZwYzbp','click','</h3>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22harga-wrapper\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22harga-asli\x22>Rp','touches','add','value','querySelectorAll','5004CLQQBG','addEventListener','2RpOQVi','product','display','change','WDP','collection','<p>Tidak\x20ada\x20produk\x20yang\x20ditemukan.</p>','loadingAnimation','sortPrice','catch','warning','namaBarang','placeOrderBtn','get','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<label\x20class=\x22persen-diskon\x22>(','10107565QqrBgY','transform','location','rgba(255,\x20255,\x20255,\x200.8)','281076bHcvBm','<p>Terjadi\x20kesalahan:\x20','toLocaleString','top','touchmove','includes','orderModal','getElementById','target','8px','Orders','Form\x20Tidak\x20Lengkap','746972CPScLo','%\x20OFF)</label>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22harga-diskon\x22>Rp','spinner','remove','id-ID','length','hargaDiskon','sort','Error\x20mendapatkan\x20produk:\x20','createElement','1840855nHQUHJ','<p>Nama\x20Game:\x20','</p>\x0a\x20\x20\x20\x20\x20\x20','replace','UID,\x20Server\x20ID,\x20produk,\x20nomor\x20telepon,\x20dan\x20metode\x20pembayaran\x20harus\x20diisi\x20dengan\x20benar\x20sebelum\x20melanjutkan.','<p>Proses\x20pemesanan,\x20harap\x20tunggu...</p>','Terjadi\x20kesalahan\x20saat\x20membuat\x20pesanan.','AIzaSyAjqRnTArhBhY8FD-Kfx10lE0hU3uZfw0o','error','username','Mobile\x20Legends','12DdzLhi','orderDetails','submit','data','orderan.html?orderId=','div','&zoneid=','forEach','preventDefault','\x0a\x20\x20\x20\x20<p><strong>UID:</strong>\x20','G-W17ZLT7J0F','result','style','json','classList','<p>Error:\x20','boxShadow','287761560812'];_0xd147=function(){return _0x1c02e5;};return _0xd147();}let selectedProduct=null;db[_0x2bb65b(0x192)]('MobileLegends')[_0x2bb65b(0x19a)]()[_0x2bb65b(0x16b)](_0x20a8b1=>{const _0x19e508=_0x2bb65b,_0x13148f=[];_0x20a8b1[_0x19e508(0x143)](_0x172545=>{const _0x2b932e=_0x19e508,_0x16d55c=_0x172545[_0x2b932e(0x13f)]();_0x13148f[_0x2b932e(0x16c)](_0x16d55c);}),sortProducts(_0x13148f,_0x19e508(0x163)),document[_0x19e508(0x1a7)](_0x19e508(0x195))[_0x19e508(0x18c)](_0x19e508(0x190),_0x291741=>{const _0x1b8cff=_0x19e508,_0x4a81c4=_0x291741[_0x1b8cff(0x1a8)][_0x1b8cff(0x189)];sortProducts(_0x13148f,_0x4a81c4);});})[_0x2bb65b(0x196)](_0x5a0d86=>{const _0x5c8b85=_0x2bb65b;console[_0x5c8b85(0x139)](_0x5c8b85(0x1b4),_0x5a0d86);});function displayProducts(_0x544647){const _0x18a0ac=_0x2bb65b;productContainer[_0x18a0ac(0x16a)]='',_0x544647[_0x18a0ac(0x1b1)]===0x0?productContainer[_0x18a0ac(0x16a)]=_0x18a0ac(0x193):_0x544647[_0x18a0ac(0x143)](_0xac5864=>{const _0x3033bd=_0x18a0ac,_0x55a844=parseInt(_0xac5864[_0x3033bd(0x172)][_0x3033bd(0x1b9)](/\D/g,'')),_0x221c06=parseInt(_0xac5864['hargaDiskon']['replace'](/\D/g,'')),_0x4f7e88=Math[_0x3033bd(0x16e)]((_0x55a844-_0x221c06)/_0x55a844*0x64),_0x28438b=document[_0x3033bd(0x1b5)](_0x3033bd(0x141));_0x28438b[_0x3033bd(0x14a)][_0x3033bd(0x188)](_0x3033bd(0x18e)),_0x28438b[_0x3033bd(0x16a)]=_0x3033bd(0x15a)+_0xac5864[_0x3033bd(0x198)]+_0x3033bd(0x186)+_0x55a844[_0x3033bd(0x1a2)](_0x3033bd(0x1b0))+_0x3033bd(0x19b)+_0x4f7e88+_0x3033bd(0x1ad)+_0x221c06[_0x3033bd(0x1a2)](_0x3033bd(0x1b0))+_0x3033bd(0x1b8),_0x28438b['addEventListener'](_0x3033bd(0x185),()=>{const _0x10774b=_0x3033bd;document[_0x10774b(0x18a)]('.product')[_0x10774b(0x143)](_0x4a9403=>_0x4a9403['classList'][_0x10774b(0x1af)](_0x10774b(0x160))),_0x28438b['classList']['add'](_0x10774b(0x160)),selectedProduct=_0xac5864;}),productContainer[_0x3033bd(0x173)](_0x28438b);});}function sortProducts(_0x4e00cc,_0x2b06c1){const _0x40b978=_0x2bb65b;let _0x2ae8e4=[..._0x4e00cc];if(_0x2b06c1===_0x40b978(0x163))_0x2ae8e4[_0x40b978(0x1b3)]((_0x2c047b,_0x46a9ec)=>parseInt(_0x2c047b[_0x40b978(0x1b2)][_0x40b978(0x1b9)](/\D/g,''))-parseInt(_0x46a9ec['hargaDiskon'][_0x40b978(0x1b9)](/\D/g,'')));else{if(_0x2b06c1===_0x40b978(0x175))_0x2ae8e4[_0x40b978(0x1b3)]((_0x380e77,_0xb6fb0d)=>parseInt(_0xb6fb0d[_0x40b978(0x1b2)][_0x40b978(0x1b9)](/\D/g,''))-parseInt(_0x380e77['hargaDiskon'][_0x40b978(0x1b9)](/\D/g,'')));else _0x2b06c1===_0x40b978(0x191)&&(_0x2ae8e4=_0x2ae8e4[_0x40b978(0x179)](_0x39f78e=>_0x39f78e[_0x40b978(0x198)][_0x40b978(0x1a5)]('×')));}displayProducts(_0x2ae8e4);}const placeOrderBtn=document[_0x2bb65b(0x1a7)](_0x2bb65b(0x199)),orderModal=document['getElementById'](_0x2bb65b(0x1a6)),orderDetails=document['getElementById'](_0x2bb65b(0x13d)),confirmOrderBtn=document[_0x2bb65b(0x1a7)](_0x2bb65b(0x166));let paymentMethod;placeOrderBtn[_0x2bb65b(0x18c)](_0x2bb65b(0x185),()=>{const _0x4bc966=_0x2bb65b,_0x34fa67=document['getElementById']('uid')[_0x4bc966(0x189)],_0x44ba81=document[_0x4bc966(0x1a7)]('serverId')[_0x4bc966(0x189)],_0x313e9e=document[_0x4bc966(0x1a7)]('phoneNumber')[_0x4bc966(0x189)];paymentMethod=document['querySelector']('input[name=\x22paymentMethod\x22]:checked')?.['value'];if(!_0x34fa67||!_0x44ba81||!selectedProduct||!_0x313e9e||!paymentMethod){Swal[_0x4bc966(0x16d)]({'icon':_0x4bc966(0x197),'title':_0x4bc966(0x1ab),'text':_0x4bc966(0x1ba),'confirmButtonText':'OK','background':'#1e1e1e','color':_0x4bc966(0x181),'confirmButtonColor':_0x4bc966(0x17a)});return;}orderDetails[_0x4bc966(0x16a)]=_0x4bc966(0x145)+_0x34fa67+_0x4bc966(0x157)+_0x44ba81+_0x4bc966(0x171)+selectedProduct[_0x4bc966(0x198)]+_0x4bc966(0x180)+selectedProduct[_0x4bc966(0x1b2)]+_0x4bc966(0x169)+paymentMethod+_0x4bc966(0x14e)+_0x313e9e+'</p>\x0a\x20\x20\x20\x20<p><strong>Nama\x20Game:</strong>\x20Mobile\x20Legends</p>\x0a\x20\x20',orderModal[_0x4bc966(0x14a)][_0x4bc966(0x188)](_0x4bc966(0x17f));});let startY=0x0;orderModal['addEventListener']('touchstart',_0x525320=>{const _0x5da20d=_0x2bb65b;startY=_0x525320['touches'][0x0][_0x5da20d(0x15b)];}),orderModal[_0x2bb65b(0x18c)](_0x2bb65b(0x1a4),_0x3e5bc5=>{const _0x52ee3b=_0x2bb65b,_0x32a261=_0x3e5bc5[_0x52ee3b(0x187)][0x0][_0x52ee3b(0x15b)],_0x117847=_0x32a261-startY;_0x117847>0x32&&orderModal[_0x52ee3b(0x14a)][_0x52ee3b(0x1af)](_0x52ee3b(0x17f));}),confirmOrderBtn[_0x2bb65b(0x18c)](_0x2bb65b(0x185),()=>{const _0x2d774d=_0x2bb65b,_0x2f669a=document[_0x2d774d(0x1a7)]('uid')[_0x2d774d(0x189)],_0x2394e8=document[_0x2d774d(0x1a7)](_0x2d774d(0x176))[_0x2d774d(0x189)],_0x4400bb=_0x2f669a+'-'+_0x2394e8,_0xb0ff86={'combinedId':_0x4400bb,'productName':selectedProduct[_0x2d774d(0x198)],'productPrice':selectedProduct[_0x2d774d(0x1b2)],'paymentMethod':paymentMethod,'phoneNumber':document[_0x2d774d(0x1a7)]('phoneNumber')[_0x2d774d(0x189)],'gameName':_0x2d774d(0x13b),'timestamp':new Date()};showLoadingAnimation(),db[_0x2d774d(0x192)](_0x2d774d(0x1aa))[_0x2d774d(0x188)](_0xb0ff86)[_0x2d774d(0x16b)](_0x3b5208=>{const _0x30191a=_0x2d774d,_0x606775=_0x3b5208['id'];hideLoadingAnimation(),alert(_0x30191a(0x167)),window[_0x30191a(0x19e)][_0x30191a(0x170)]=_0x30191a(0x140)+_0x606775;})[_0x2d774d(0x196)](_0x12a94f=>{const _0x46c52b=_0x2d774d;hideLoadingAnimation(),console[_0x46c52b(0x139)](_0x46c52b(0x158),_0x12a94f),alert(_0x46c52b(0x137));});});function showLoadingAnimation(){const _0x3d5978=_0x2bb65b,_0x51b647=document[_0x3d5978(0x1b5)](_0x3d5978(0x141));_0x51b647['id']=_0x3d5978(0x194),_0x51b647['innerHTML']=_0x3d5978(0x1bb),_0x51b647[_0x3d5978(0x148)]['position']=_0x3d5978(0x178),_0x51b647['style'][_0x3d5978(0x1a3)]='50%',_0x51b647[_0x3d5978(0x148)][_0x3d5978(0x17e)]='50%',_0x51b647[_0x3d5978(0x148)][_0x3d5978(0x19d)]=_0x3d5978(0x162),_0x51b647['style'][_0x3d5978(0x183)]=_0x3d5978(0x159),_0x51b647[_0x3d5978(0x148)][_0x3d5978(0x154)]=_0x3d5978(0x19f),_0x51b647['style'][_0x3d5978(0x15c)]=_0x3d5978(0x150),_0x51b647[_0x3d5978(0x148)][_0x3d5978(0x164)]=_0x3d5978(0x1a9),_0x51b647[_0x3d5978(0x148)][_0x3d5978(0x14c)]=_0x3d5978(0x17d),document[_0x3d5978(0x153)][_0x3d5978(0x173)](_0x51b647);}function hideLoadingAnimation(){const _0x1585db=_0x2bb65b,_0x165254=document[_0x1585db(0x1a7)](_0x1585db(0x194));_0x165254&&_0x165254['remove']();}document[_0x2bb65b(0x1a7)](_0x2bb65b(0x16f))[_0x2bb65b(0x18c)](_0x2bb65b(0x13e),function(_0x453ae7){const _0x538e83=_0x2bb65b;_0x453ae7[_0x538e83(0x144)]();const _0x225f7e=document[_0x538e83(0x1a7)]('uid')['value'],_0x3db258=document['getElementById'](_0x538e83(0x176))[_0x538e83(0x189)],_0x2ccf70=_0x538e83(0x14f),_0x110b94=_0x538e83(0x168)+_0x2ccf70+'&game=ml&id='+_0x225f7e+_0x538e83(0x142)+_0x3db258;document[_0x538e83(0x1a7)]('spinner')[_0x538e83(0x148)][_0x538e83(0x18f)]='block',document['getElementById'](_0x538e83(0x147))[_0x538e83(0x16a)]='',fetch(_0x110b94)['then'](_0x44e6b6=>_0x44e6b6[_0x538e83(0x149)]())[_0x538e83(0x16b)](_0x495144=>{const _0x42092b=_0x538e83;document[_0x42092b(0x1a7)](_0x42092b(0x1ae))['style'][_0x42092b(0x18f)]=_0x42092b(0x156),_0x495144[_0x42092b(0x17b)]===!![]?document[_0x42092b(0x1a7)](_0x42092b(0x147))[_0x42092b(0x16a)]=_0x42092b(0x1b7)+_0x495144['data'][_0x42092b(0x13a)]+_0x42092b(0x15d):document[_0x42092b(0x1a7)](_0x42092b(0x147))['innerHTML']=_0x42092b(0x14b)+_0x495144['message']+_0x42092b(0x15d);})[_0x538e83(0x196)](_0x54cf4a=>{const _0x27da39=_0x538e83;document[_0x27da39(0x1a7)](_0x27da39(0x1ae))[_0x27da39(0x148)][_0x27da39(0x18f)]=_0x27da39(0x156),document[_0x27da39(0x1a7)](_0x27da39(0x147))[_0x27da39(0x16a)]=_0x27da39(0x1a1)+_0x54cf4a[_0x27da39(0x182)]+_0x27da39(0x15d);});});
+</script>
+
+</body>
+</html>

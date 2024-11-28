@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Uang Masuk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #181818;
+            color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            padding: 20px;
+            flex: 1;
+        }
+
+        h2 {
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #00d1b2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            color: #f4f4f4;
+        }
+
+        th {
+            background-color: #00d1b2;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tr:hover {
+            background-color: #333;
+        }
+
+        .total-container {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #00d1b2;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            button, select {
+                width: 100%;
+            }
+
+            .chart-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h2>Uang Masuk - Pesanan Selesai</h2>
+        <div id="orderListContainer">
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Nama Produk</th>
+                        <th>Harga Produk</th>
+                        <th>Metode Pembayaran</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody">
+                    <!-- Data pesanan akan dimuat di sini -->
+                </tbody>
+            </table>
+            <div class="total-container">
+                Total Uang Masuk: Rp <span id="totalAmount">0</span>
+            </div>
+        </div>
+
+        <!-- Container untuk dua grafik -->
+        <div class="chart-container">
+            <div id="incomeChart" style="width: 100%; height: 350px;"></div>
+            <div id="bestSellingChart" style="width: 100%; height: 350px;"></div>
+        </div>
+    </main>
+
+<script>
+   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAjqRnTArhBhY8FD-Kfx10lE0hU3uZfw0o",
+  authDomain: "bocdar-f32ae.firebaseapp.com",
+  projectId: "bocdar-f32ae",
+  storageBucket: "bocdar-f32ae.firebasestorage.app",
+  messagingSenderId: "287761560812",
+  appId: "1:287761560812:web:3e416122c6f61cc9b721c9",
+  measurementId: "G-W17ZLT7J0F"
+};
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let orderDataArray = [];
+    let totalAmount = 0;
+    let productSalesCount = {};
+
+    // Fungsi untuk mengambil data pesanan yang statusnya "Selesai" dari Firestore
+    function fetchCompletedOrders() {
+        const orderTableBody = document.getElementById('orderTableBody');
+        db.collection('Orders').where('status', '==', 'completed').get().then((querySnapshot) => {
+            orderTableBody.innerHTML = ''; // Bersihkan baris yang ada
+            querySnapshot.forEach((doc) => {
+                const orderData = doc.data();
+                const formattedPrice = parseFloat(orderData.productPrice.replace(/\./g, '')); // Ganti titik dan konversi ke float
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${doc.id}</td>
+                    <td>${orderData.productName}</td>
+                    <td>Rp ${formattedPrice.toLocaleString('id-ID')}</td>
+                    <td>${orderData.paymentMethod}</td>
+                `;
+                orderTableBody.appendChild(row);
+
+                // Tambahkan harga produk ke totalAmount
+                totalAmount += formattedPrice;
+
+                // Tambahkan data ke orderDataArray
+                orderDataArray.push({ productName: orderData.productName, productPrice: orderData.productPrice });
+
+                // Hitung jumlah penjualan produk
+                productSalesCount[orderData.productName] = (productSalesCount[orderData.productName] || 0) + 1;
+            });
+
+            // Update total uang masuk di elemen HTML
+            document.getElementById('totalAmount').textContent = totalAmount.toLocaleString('id-ID');
+            
+            // Panggil fungsi untuk menggambar grafik
+            drawIncomeChart();
+            drawBestSellingChart();
+        }).catch((error) => {
+            console.error("Error fetching orders: ", error);
+            orderTableBody.innerHTML = `<tr><td colspan="4">Terjadi kesalahan saat mengambil data pesanan.</td></tr>`;
+        });
+    }
+
+    // Fungsi untuk menggambar grafik pendapatan menggunakan ApexCharts
+    function drawIncomeChart() {
+        const productNames = orderDataArray.map(data => data.productName);
+        const productPrices = orderDataArray.map(data => parseFloat(data.productPrice.replace(/\./g, ''))); // Ubah parseFloat
+
+        const options = {
+            chart: {
+                type: 'bar',
+                height: 350,
+                toolbar: {
+                    show: false
+                }
+            },
+            series: [{
+                name: 'Pendapatan Produk',
+                data: productPrices
+            }],
+            xaxis: {
+                categories: productNames,
+                labels: {
+                    style: {
+                        colors: '#f4f4f4'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#f4f4f4'
+                    }
+                }
+            },
+            colors: ['#00D1B2'],
+            dataLabels: {
+                enabled: false
+            },
+            grid: {
+                borderColor: '#444'
+            },
+            tooltip: {
+                theme: 'dark'
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#incomeChart"), options);
+        chart.render();
+    }
+
+    // Fungsi untuk menggambar grafik barang terlaris menggunakan ApexCharts
+    function drawBestSellingChart() {
+        const productNames = Object.keys(productSalesCount);
+        const productSales = Object.values(productSalesCount);
+
+        const options = {
+            chart: {
+                type: 'pie',
+                height: 350,
+                toolbar: {
+                    show: false
+                }
+            },
+            series: productSales,
+            labels: productNames,
+            colors: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+            dataLabels: {
+                enabled: true
+            },
+            tooltip: {
+                theme: 'dark'
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#bestSellingChart"), options);
+        chart.render();
+    }
+
+    // Menjalankan fungsi untuk mengambil data pesanan saat halaman dimuat
+    fetchCompletedOrders();
+</script>
+
+</body>
+</html>
+

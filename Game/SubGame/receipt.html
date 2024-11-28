@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <title>Struk Pembayaran dan Testimonial</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .receipt-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .receipt-details {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 5px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #28a745;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #28a745;
+            cursor: pointer;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <!-- Bagian untuk menampilkan detail struk pembayaran -->
+        <h1>Struk Pembayaran</h1>
+        <div id="receiptDetails" class="receipt-details"></div>
+        <p style="text-align: center; color: #555;">Pesanan sedang diproses secara manual. Mohon tunggu sekitar 1-5 menit.</p>
+        <button id="printButton">Cetak Struk</button>
+        
+        <!-- Bagian untuk mengirimkan testimonial -->
+        <h2>Komentar Anda</h2>
+        <div class="form-group">
+            <label for="phoneNumber">Nomor Telepon (Wajib)</label>
+            <input type="text" id="phoneNumber" class="form-control" placeholder="Masukkan nomor telepon" required>
+        </div>
+
+        <div class="form-group">
+            <label for="rating">Rating (1-5)</label>
+            <input type="range" id="rating" class="slider" min="1" max="5" value="3">
+            <p style="text-align: center;" id="ratingValue">Rating: 3</p>
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Komentar Anda</label>
+            <textarea id="comment" class="form-control" rows="4" placeholder="Tulis komentar Anda" required></textarea>
+        </div>
+
+        <button class="btn btn-primary" onclick="submitTestimonial()">Kirim Testimonial</button>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
+        const _0x2fa88a=_0x28ce;(function(_0x3bdf09,_0x50815a){const _0x21982f=_0x28ce,_0x4bceba=_0x3bdf09();while(!![]){try{const _0x55334c=-parseInt(_0x21982f(0x125))/0x1+-parseInt(_0x21982f(0x12d))/0x2+-parseInt(_0x21982f(0xfc))/0x3*(parseInt(_0x21982f(0xee))/0x4)+parseInt(_0x21982f(0x10e))/0x5*(-parseInt(_0x21982f(0xf2))/0x6)+-parseInt(_0x21982f(0x110))/0x7+-parseInt(_0x21982f(0x114))/0x8*(parseInt(_0x21982f(0xf8))/0x9)+parseInt(_0x21982f(0x124))/0xa;if(_0x55334c===_0x50815a)break;else _0x4bceba['push'](_0x4bceba['shift']());}catch(_0x392e79){_0x4bceba['push'](_0x4bceba['shift']());}}}(_0x1d97,0x4b595));const firebaseConfig={'apiKey':_0x2fa88a(0x108),'authDomain':_0x2fa88a(0x107),'projectId':_0x2fa88a(0x120),'storageBucket':_0x2fa88a(0x12a),'messagingSenderId':_0x2fa88a(0x129),'appId':'1:287761560812:web:3e416122c6f61cc9b721c9','measurementId':_0x2fa88a(0x11f)},app=firebase[_0x2fa88a(0x121)](firebaseConfig),db=firebase[_0x2fa88a(0xf4)](),orderId=new URLSearchParams(window[_0x2fa88a(0x112)][_0x2fa88a(0xea)])['get']('orderId');function _0x1d97(){const _0x408eb9=['href','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p><strong>Produk:</strong>\x20','G-W17ZLT7J0F','bocdar-f32ae','initializeApp','innerHTML','innerText','11123030iUefVJ','151796jTWuwa','Kembali','paymentMethod','combinedId','287761560812','bocdar-f32ae.firebasestorage.app','error','Berhasil!','380528rOTWCm','input','collection','search','success','https://ahsan-store-github-io.vercel.app/','print','152144fvGCSU','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p><strong>Tujuan\x20Pengguna:</strong>\x20','Error','get','12PcSKqx','<p>Pesanan\x20tidak\x20ditemukan.</p>','firestore','add','rating','getElementById','300933zNYDlm','comment','then','<p>Order\x20ID\x20tidak\x20tersedia.</p>','12dfvIci','catch','receiptDetails','printButton','productPrice','Error\x20adding\x20testimonial:\x20','value','exists','toLocaleString','trim','Rating:\x20','bocdar-f32ae.firebaseapp.com','AIzaSyAjqRnTArhBhY8FD-Kfx10lE0hU3uZfw0o','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p><strong>Nama\x20Game:</strong>\x20','toDate','<p>Terjadi\x20kesalahan\x20saat\x20mengambil\x20informasi\x20pesanan.</p>','Testimonials','Semua\x20field\x20harus\x20diisi.','62375mfyEdX','doc','1289463gWGEYr','addEventListener','location','Testimonial\x20berhasil\x20dikirim.','24rHCEJZ','phoneNumber','ratingValue','Error\x20fetching\x20order\x20details:\x20','\x20-\x20Rp','productName','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p><strong>Tanggal\x20Pesanan:</strong>\x20','gameName','click'];_0x1d97=function(){return _0x408eb9;};return _0x1d97();}function displayReceiptDetails(_0x5cd63d){const _0xab3d0c=_0x2fa88a,_0x1af8d5=document[_0xab3d0c(0xf7)](_0xab3d0c(0xfe));db[_0xab3d0c(0xe9)]('Orders')[_0xab3d0c(0x10f)](_0x5cd63d)[_0xab3d0c(0xf1)]()[_0xab3d0c(0xfa)](_0x5d3cc7=>{const _0x5115e6=_0xab3d0c;if(_0x5d3cc7[_0x5115e6(0x103)]){const _0xc7c1f7=_0x5d3cc7['data']();_0x1af8d5[_0x5115e6(0x122)]=_0x5115e6(0xef)+_0xc7c1f7[_0x5115e6(0x128)]+_0x5115e6(0x11e)+_0xc7c1f7[_0x5115e6(0x119)]+_0x5115e6(0x118)+_0xc7c1f7[_0x5115e6(0x100)]+'</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p><strong>Metode\x20Pembayaran:</strong>\x20'+_0xc7c1f7[_0x5115e6(0x127)]+'</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p><strong>Nomor\x20Telepon:</strong>\x20'+_0xc7c1f7[_0x5115e6(0x115)]+_0x5115e6(0x109)+_0xc7c1f7[_0x5115e6(0x11b)]+_0x5115e6(0x11a)+new Date(_0xc7c1f7['timestamp'][_0x5115e6(0x10a)]())[_0x5115e6(0x104)]()+'</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p><strong>Bukti\x20Pembayaran:</strong>\x20<a\x20href=\x22'+_0xc7c1f7['paymentProof']+'\x22\x20target=\x22_blank\x22>Lihat\x20Bukti</a></p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20';}else _0x1af8d5[_0x5115e6(0x122)]=_0x5115e6(0xf3);})['catch'](_0x4fb4fc=>{const _0x26d5fe=_0xab3d0c;console['error'](_0x26d5fe(0x117),_0x4fb4fc),_0x1af8d5['innerHTML']=_0x26d5fe(0x10b);});}function submitTestimonial(){const _0x46fe29=_0x2fa88a,_0x5d4dbb=document[_0x46fe29(0xf7)](_0x46fe29(0x115))[_0x46fe29(0x102)][_0x46fe29(0x105)](),_0x346f03=document[_0x46fe29(0xf7)](_0x46fe29(0xf6))[_0x46fe29(0x102)],_0x4344df=document[_0x46fe29(0xf7)]('comment')[_0x46fe29(0x102)][_0x46fe29(0x105)]();if(_0x5d4dbb===''||_0x4344df===''){swal(_0x46fe29(0xf0),_0x46fe29(0x10d),_0x46fe29(0x12b));return;}db['collection'](_0x46fe29(0x10c))[_0x46fe29(0xf5)]({'orderId':orderId,'phoneNumber':_0x5d4dbb,'rating':parseInt(_0x346f03),'comment':_0x4344df,'timestamp':new Date()})[_0x46fe29(0xfa)](()=>{const _0x695034=_0x46fe29;swal({'title':_0x695034(0x12c),'text':_0x695034(0x113),'icon':_0x695034(0xeb),'buttons':[_0x695034(0x126),'OK']})[_0x695034(0xfa)](_0xed0e49=>{const _0x5b0e85=_0x695034;_0xed0e49&&(window[_0x5b0e85(0x112)][_0x5b0e85(0x11d)]=_0x5b0e85(0xec));}),document[_0x695034(0xf7)](_0x695034(0x115))['value']='',document[_0x695034(0xf7)](_0x695034(0xf6))[_0x695034(0x102)]=0x3,document[_0x695034(0xf7)](_0x695034(0x116))[_0x695034(0x123)]='Rating:\x203',document[_0x695034(0xf7)](_0x695034(0xf9))['value']='';})[_0x46fe29(0xfd)](_0x56c10b=>{const _0x498854=_0x46fe29;console[_0x498854(0x12b)](_0x498854(0x101),_0x56c10b);});}function _0x28ce(_0x1ae604,_0x162ff7){const _0x1d9777=_0x1d97();return _0x28ce=function(_0x28cea4,_0x2a1b63){_0x28cea4=_0x28cea4-0xe9;let _0x2c6b46=_0x1d9777[_0x28cea4];return _0x2c6b46;},_0x28ce(_0x1ae604,_0x162ff7);}document[_0x2fa88a(0xf7)](_0x2fa88a(0xf6))[_0x2fa88a(0x111)](_0x2fa88a(0x12e),function(){const _0x366301=_0x2fa88a;document[_0x366301(0xf7)]('ratingValue')[_0x366301(0x123)]=_0x366301(0x106)+this[_0x366301(0x102)];}),document[_0x2fa88a(0xf7)](_0x2fa88a(0xff))[_0x2fa88a(0x111)](_0x2fa88a(0x11c),function(){const _0x106901=_0x2fa88a;window[_0x106901(0xed)]();}),window['onload']=function(){const _0x58f9d0=_0x2fa88a;orderId?displayReceiptDetails(orderId):document[_0x58f9d0(0xf7)](_0x58f9d0(0xfe))[_0x58f9d0(0x122)]=_0x58f9d0(0xfb);};
+    </script>
+</body>
+</html>

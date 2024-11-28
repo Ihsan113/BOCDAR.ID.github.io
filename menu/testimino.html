@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Testimonial - BOCDAR.ID</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #2c2c2c;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px #000;
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-card {
+            background-color: #444;
+            border: 1px solid #ffcc00;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0; /* Adjust margin for better spacing */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .rating {
+            color: #ffcc00;
+            font-size: 18px;
+        }
+
+        .phone-number {
+            color: #888;
+            font-size: 14px;
+        }
+
+        #showMoreButton {
+            margin-top: 10px;
+            display: none; /* Hidden by default */
+        }
+
+        .testimonial-container {
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+    </style>
+</head>
+<body>
+    <h1> Testimonial - BOCDAR.ID</h1>
+
+    <div id="testimonialDisplay" class="testimonial-container container"></div>
+
+    <div class="text-center">
+        <button id="showMoreButton" class="btn btn-warning" onclick="showMoreTestimonials()">Tampilkan Lebih Banyak</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
+      const _0x46630c=_0x3e52;(function(_0x7bca7e,_0x2fc50a){const _0x27d193=_0x3e52,_0x20455d=_0x7bca7e();while(!![]){try{const _0x4d0990=parseInt(_0x27d193(0x11a))/0x1+-parseInt(_0x27d193(0x125))/0x2+-parseInt(_0x27d193(0x11e))/0x3+-parseInt(_0x27d193(0x118))/0x4+-parseInt(_0x27d193(0x116))/0x5*(parseInt(_0x27d193(0x11f))/0x6)+parseInt(_0x27d193(0x11d))/0x7+parseInt(_0x27d193(0x10c))/0x8;if(_0x4d0990===_0x2fc50a)break;else _0x20455d['push'](_0x20455d['shift']());}catch(_0x1b6d0a){_0x20455d['push'](_0x20455d['shift']());}}}(_0x4ff3,0x9b8d7));const firebaseConfig={'apiKey':'AIzaSyAjqRnTArhBhY8FD-Kfx10lE0hU3uZfw0o','authDomain':_0x46630c(0x114),'projectId':_0x46630c(0x128),'storageBucket':'bocdar-f32ae.firebasestorage.app','messagingSenderId':_0x46630c(0x123),'appId':_0x46630c(0x120),'measurementId':'G-W17ZLT7J0F'};firebase[_0x46630c(0x106)](firebaseConfig);const db=firebase['firestore']();function _0x4ff3(){const _0x57f41c=['rating','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>','testimonialDisplay','getElementById','createElement','className','phoneNumber','initializeApp','length','Testimonials','innerHTML','\x20★</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22phone-number\x22>','min','16891696goYWik','data','$1*****$3','display','push','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-body\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22rating\x22>Rating:\x20','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','forEach','bocdar-f32ae.firebaseapp.com','replace','395LSjRfe','then','3660320iPHWby','div','219440ZzbFQQ','get','testimonial-card\x20card','6428898KQiVvO','2001237UmtDFd','15396hiTcXD','1:287761560812:web:3e416122c6f61cc9b721c9','comment','style','287761560812','collection','1654600SiitPF','showMoreButton','appendChild','bocdar-f32ae'];_0x4ff3=function(){return _0x57f41c;};return _0x4ff3();}let currentTestimonials=[],displayedCount=0x0;function displayTestimonials(){const _0x383e2f=_0x46630c;db[_0x383e2f(0x124)](_0x383e2f(0x108))[_0x383e2f(0x11b)]()[_0x383e2f(0x117)](_0x5855db=>{const _0xcc54f6=_0x383e2f;currentTestimonials=[],_0x5855db[_0xcc54f6(0x113)](_0x83bf00=>{const _0x40702d=_0xcc54f6;currentTestimonials[_0x40702d(0x110)](_0x83bf00[_0x40702d(0x10d)]());}),displayedCount=0x0,updateDisplayedTestimonials();});}function _0x3e52(_0x26415f,_0xad8874){const _0x4ff3b6=_0x4ff3();return _0x3e52=function(_0x3e5244,_0x1208d6){_0x3e5244=_0x3e5244-0x100;let _0x1ffa8e=_0x4ff3b6[_0x3e5244];return _0x1ffa8e;},_0x3e52(_0x26415f,_0xad8874);}function updateDisplayedTestimonials(){const _0xbeef34=_0x46630c,_0x48dc5d=document['getElementById'](_0xbeef34(0x101));_0x48dc5d[_0xbeef34(0x109)]='';const _0x4516eb=Math[_0xbeef34(0x10b)](displayedCount+0x5,currentTestimonials['length']);for(let _0x5e7040=displayedCount;_0x5e7040<_0x4516eb;_0x5e7040++){const _0x396682=currentTestimonials[_0x5e7040],_0x40393e=_0x396682[_0xbeef34(0x105)][_0xbeef34(0x115)](/(\d{2})(\d{5})(\d+)/,_0xbeef34(0x10e)),_0x33a9fc=document[_0xbeef34(0x103)](_0xbeef34(0x119));_0x33a9fc[_0xbeef34(0x104)]=_0xbeef34(0x11c),_0x33a9fc['innerHTML']=_0xbeef34(0x111)+_0x396682[_0xbeef34(0x129)]+_0xbeef34(0x10a)+_0x40393e+_0xbeef34(0x100)+_0x396682[_0xbeef34(0x121)]+_0xbeef34(0x112),_0x48dc5d[_0xbeef34(0x127)](_0x33a9fc);}displayedCount=_0x4516eb,document[_0xbeef34(0x102)](_0xbeef34(0x126))[_0xbeef34(0x122)][_0xbeef34(0x10f)]=displayedCount<currentTestimonials[_0xbeef34(0x107)]?'block':'none';}function showMoreTestimonials(){updateDisplayedTestimonials();}displayTestimonials();
+    </script>
+</body>
+</html>

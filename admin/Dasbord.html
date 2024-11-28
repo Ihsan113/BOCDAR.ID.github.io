@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Gunakan font modern */
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow-x: hidden; /* Mencegah scroll horizontal */
+        }
+
+        /* Sidebar yang lebih modern */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            
+            width: 35%;
+            height: 100%;
+            background-color: #1e1e2f; /* Warna latar belakang gelap */
+            padding-top: 40px;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+            z-index: 2;
+            
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar button {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: transparent;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 6px;
+            
+            outline: none;
+        }
+
+        .sidebar button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Tombol tutup sidebar */
+        .close-btn {
+            position: absolute;
+            top: 0px;
+            right: 20px;
+            font-size: 24px;
+            color: white;
+            background: none;
+            border: none;
+            
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Tombol untuk membuka sidebar */
+        .open-btn {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            padding: 12px 18px;
+            background-color: #1e1e2f;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            z-index: 3;
+            
+            transition: background-color 0.3s;
+        }
+
+        .open-btn:hover {
+            background-color: #2c2c44;
+        }
+
+        /* Konten utama */
+        .main-content {
+            margin-left: 0px;
+            padding: 0px;
+            width: 100%; /* Responsif dengan mempertimbangkan tombol buka */
+            transition: margin-left 0.3s;
+        }
+
+        .sidebar.active ~ .main-content {
+            margin-left: 35%; /* Geser konten saat sidebar aktif */
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 28px; /* Ukuran font modern */
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .iframe-container {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            display: none;
+            border-radius: 6px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Loader animasi */
+.loader {
+    border: 6px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 6px solid #1e1e2f;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none; /* Disembunyikan secara default */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Pastikan iframe dan loader ada dalam container */
+.iframe-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+.button i {
+    margin-right: 8px; /* Beri jarak antara ikon dan teks */
+}
+
+
+.toggle-container {
+    position: fixed;
+    right: 0px;
+    top: 0px; /* Ganti top sesuai kebutuhan */
+    display: flex;
+    align-items: center;
+    padding: 10px; /* Padding untuk kontainer */
+    background-color: rgba(30, 30, 30, 0.8); /* Warna latar belakang */
+    border-radius: 8px; /* Sudut yang membulat */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Bayangan untuk efek kedalaman */
+}
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-right: 10px;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #dc3545; /* Warna Merah (Closed) */
+    transition: .4s;
+    border-radius: 34px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: #28a745; /* Warna Hijau (Open) */
+}
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+.toggle-text {
+    margin-left: 10px;
+    font-weight: bold;
+    color: #fff;
+}
+.status-icon {
+    font-size: 24px;
+    margin-right: 5px;
+}
+
+    </style>
+</head>
+<body>
+    
+    <div class="main-content">
+    <!-- Konten utama -->
+
+
+    <button class="open-btn" onclick="toggleSidebar()">☰ Menu</button>
+
+
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleSidebar()">✕</button>
+        
+        <br>
+
+<br>
+<br>
+
+<button class="button" onclick="loadPage('default.html')">
+    <i class="fas fa-chart-bar"></i> Statistik
+</button>
+
+<button class="button" onclick="loadPage('adminorder.html')">
+    <i class="fas fa-shopping-cart"></i> Kelola Orderan
+</button>
+
+<button class="button" onclick="loadPage('admin.html')">
+    <i class="fas fa-box"></i> Kelola Item
+</button>
+
+<button class="button" onclick="loadPage('Input.html')">
+    <i class="fas fa-plus"></i> Input Barang
+</button>
+
+<button class="button" onclick="loadPage('cetak.html')">
+    <i class="fas fa-print"></i> Cetak Struk
+</button>
+
+    </div>
+
+  <div class="iframe-wrapper">
+    <div id="loader" class="loader"></div>
+    <iframe id="contentFrame" class="iframe-container" aria-live="polite"></iframe>
+</div>
+</div>
+
+<div class="toggle-container">
+    <label class="toggle-switch">
+        <input id="toggleBtn" type="checkbox">
+        <span class="slider"></span>
+    </label>
+    <span id="toggleText" class="toggle-text">Closed</span>
+    <i id="statusIcon" class="fas fa-store status-icon" style="color: #dc3545;"></i> <!-- Ganti ikon lampu dengan ikon toko -->
+</div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+    <script>
+       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAjqRnTArhBhY8FD-Kfx10lE0hU3uZfw0o",
+  authDomain: "bocdar-f32ae.firebaseapp.com",
+  projectId: "bocdar-f32ae",
+  storageBucket: "bocdar-f32ae.firebasestorage.app",
+  messagingSenderId: "287761560812",
+  appId: "1:287761560812:web:3e416122c6f61cc9b721c9",
+  measurementId: "G-W17ZLT7J0F"
+};
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Mengambil status toko dari Firestore
+        function loadStoreStatus() {
+            const toggleBtn = document.getElementById('toggleBtn');
+            const toggleText = document.getElementById('toggleText');
+            const statusIcon = document.getElementById('statusIcon');
+
+            db.collection('StoreStatus').doc('status').get().then((doc) => {
+                if (doc.exists) {
+                    const storeStatus = doc.data().status;
+                    toggleBtn.checked = storeStatus === 'open';
+                    toggleText.textContent = storeStatus.charAt(0).toUpperCase() + storeStatus.slice(1);
+                    statusIcon.style.color = storeStatus === 'open' ? '#28a745' : '#dc3545'; // Mengubah warna ikon
+                } else {
+                    console.log("No such document!");
+                }
+            }).catch((error) => {
+                console.error("Error fetching store status: ", error);
+            });
+        }
+
+        // Mengubah status toko
+        function toggleStoreStatus() {
+            const toggleBtn = document.getElementById('toggleBtn');
+            const toggleText = document.getElementById('toggleText');
+            const statusIcon = document.getElementById('statusIcon');
+            const newStatus = toggleBtn.checked ? 'open' : 'closed';
+
+            db.collection('StoreStatus').doc('status').set({ status: newStatus })
+                .then(() => {
+                    toggleText.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+                    statusIcon.style.color = newStatus === 'open' ? '#28a745' : '#dc3545'; // Mengubah warna ikon
+                })
+                .catch((error) => {
+                    console.error("Error updating store status: ", error);
+                });
+        }
+
+        // Panggil fungsi untuk memuat status toko saat halaman dimuat
+        loadStoreStatus();
+
+        // Menambahkan event listener untuk saklar
+        document.getElementById('toggleBtn').addEventListener('change', toggleStoreStatus);
+    
+    
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('active');
+    }
+
+    function loadPage(page) {
+        const frame = document.getElementById('contentFrame');
+        frame.src = page; // Ganti URL iframe dengan halaman yang dipilih
+        frame.style.display = 'block'; // Tampilkan iframe
+    }
+
+    
+    
+    function loadPage(page) {
+    const frame = document.getElementById('contentFrame');
+    const loader = document.getElementById('loader');
+    const mainContent = document.querySelector('.main-content');
+
+    // Tampilkan loader saat iframe mulai memuat
+    loader.style.display = 'block';
+    mainContent.classList.remove('loaded');
+
+    setTimeout(() => {
+        frame.src = page;
+        frame.style.display = 'block';
+    }, 500);
+
+    frame.onload = function() {
+        // Sembunyikan loader saat iframe selesai memuat
+        loader.style.display = 'none';
+        mainContent.classList.add('loaded');
+    };
+}
+window.onload = function() {
+        loadPage('default.html'); // Memuat statistik secara default
+    };
+</script>
+
+</body>
+</html>
